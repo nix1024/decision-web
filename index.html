@@ -39,9 +39,7 @@
         },
         methods: {
             getDecision: function() {
-                alert(self.decisionId);
-                location.href = 'tinydecisions://decision?id=' + self.decisionId 
-                this.fetchRecords(this.decisionId)
+                location.href = 'tinydecisions://decision?id=' + this.decisionId 
             },
 
             fetchRecords: function(decisionId) {

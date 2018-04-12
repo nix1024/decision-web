@@ -1,45 +1,54 @@
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta name="apple-itunes-app" content="app-id=1338769645"/>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-itunes-app" content="app-id=1338769645"/>
 
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
-<link rel="stylesheet" href="css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+    <div id="app">
+        <div class="install">
+            <div class="install-content">
+                <img src="images/icon.png"/>
+                <h1>{{ name }}</h1>
+                <p><button v-on:click="getDecision" class="btn-get">{{ getButtonTitle }}</button></p>
+            </div>
+        </div>
 
-<div id="app">
-    <div class="install">
-        <div class="install-content">
-            <img src="images/icon.png"/>
-            <h1>{{ name }}</h1>
-            <p><button v-on:click="getDecision" class="btn-get">GET DECISION</button></p>
+        <div class="options">
+            <div class="option" v-for="option in options">
+                {{ option }}
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Tiny Decisions</p>
         </div>
     </div>
-
-    <div class="options">
-        <div class="option" v-for="option in options">
-            {{ option }}
-        </div>
-    </div>
-
-    <div class="footer">
-        <p>Tiny Decisions</p>
-    </div>
-</div>
-
+</body>
 <script>
     var app = new Vue({
         el: '#app',
         data: {
             name: "",
             options: [],
+            getButtonTitle: "GET DECISION",
         },
         computed: {
             decisionId: function() {
-                return window.location.search.split('?')[1].split('=')[1];
+                var urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('id')
             }
         },
         methods: {
             getDecision: function() {
-                location.href = 'tinydecisions://decision?id=' + this.decisionId 
+                location.href = 'tinydecisions://decision?id=' + this.decisionId
+                setTimeout(function() {
+                   window.location = "download";
+                }, 1000);
             },
 
             fetchRecords: function(decisionId) {
@@ -68,6 +77,14 @@
                 });
             }
         },
+        created: function() {
+            var lang = navigator.language;
+            if (lang.startsWith("zh-Hans") || lang.startsWith("zh-CN")) {
+                this.getButtonTitle = "获取决定";
+            } else if (lang.startsWith("zh-Hant")) {
+                this.getButtonTitle = "獲取決定";
+            }
+        }
     })
 
     window.addEventListener('cloudkitloaded', function() {
@@ -86,3 +103,4 @@
     });
 
 </script>
+</html>

@@ -60,12 +60,14 @@
                 return publicDB.fetchRecords(decisionId).then(function(response) {
                     if(response.hasErrors) {
                         console.error(response.errors[0]);
+                        window.location = "/";
                         return;
                     }
                     var records = response.records;
                     var numberOfRecords = records.length;
                     if (numberOfRecords === 0) {
                         console.error('No matching items');
+                        window.location = "/";
                         return;
                     }
                 

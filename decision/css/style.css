@@ -60,10 +60,49 @@ body {
     text-decoration: none;
   }
   
-  .preview > img {
-    width: 200px;
+  .btn-install:hover {
+    background-color: #091738;
+  }
+  
+  .options {
+    float: right;
+    width: 70%;
+    min-height: 100%;
+    background-color: white;
     display: block;
-    margin: 0 auto;
+    padding: 20px;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box
+  }
+  
+  .option {
+    min-height: 50px;
+    padding: 10px;
+    margin-top: 20px;
+    box-sizing: border-box;
+    background-color: #F0EFF4;
+    border-radius: 8px;
+    color: #333333;
+  }
+  
+  .option:first-child {
+    margin-top: 0px;
+  }
+  
+  .icon {
+    width: 32px;
+    height: 32px;
+    float: left;
+    display: block;
+    background-color: grey;
+    border-radius: 8px;
+    margin-right: 5px;
+  }
+  
+  .option > p {
+    margin: 6px 0px 0 5px;
+    display: inline-block;
   }
   
   .footer { 

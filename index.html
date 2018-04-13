@@ -1,106 +1,44 @@
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="apple-itunes-app" content="app-id=1338769645"/>
-
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
-    <link rel="stylesheet" href="css/style.css"/>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/style.css"/>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-    <div id="app">
-        <div class="install">
-            <div class="install-content">
-                <img src="images/icon.png"/>
-                <h1>{{ name }}</h1>
-                <p><button v-on:click="getDecision" class="btn-get">{{ getButtonTitle }}</button></p>
-            </div>
-        </div>
-
-        <div class="options">
-            <div class="option" v-for="option in options">
-                {{ option }}
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>Tiny Decisions</p>
-        </div>
-    </div>
+	<div id="app">
+		<div class="install">
+	        <div class="install-content">
+	            <img src="../images/icon.png"/>
+	            <h1>{{ name }}</h1>
+	            <p>{{ description }}</p>
+	            <a href="https://itunes.apple.com/cn/app/id1338769645"><img src="images/download.svg"/></a>
+	        </div>
+	    </div>
+	    <div class="preview">
+	    	<img src="images/screenshot.png"/>
+	    </div>
+	   	<div class="footer">
+	        <p>Tiny Decisions</p>
+	    </div>
+	</div>
+    <script>
+	    var app = new Vue({
+	        el: '#app',
+	        data: {
+	            name: "Tiny Decisions",
+	            description: "Tiny Decisions is a app to make all decisions fun & easy! Just input your question, add options and spin the wheel to get a random answer!",
+	        },
+	        created: function() {
+	            var lang = navigator.language;
+	            if (lang.startsWith("zh-Hans") || lang.startsWith("zh-CN")) {
+	                this.name = "小决定";
+	                this.description = "小决定是一个用来帮助你快速做决定的应用。输入你纠结的问题，添加或者导入所有的选项，用转盘来快速决定！";
+	            } else if (lang.startsWith("zh-Hant")) {
+	                this.name = "小決定";
+	                this.description = "小決定是一個用來幫助你快速做決定的應用。輸入你糾結的問題，添加或者導入所有的選項，用轉盤來快速決定！";
+	            }
+	        }
+	    })
+	</script>
 </body>
-<script>
-    var app = new Vue({
-        el: '#app',
-        data: {
-            name: "",
-            options: [],
-            getButtonTitle: "GET DECISION",
-        },
-        computed: {
-            decisionId: function() {
-                var urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get('id')
-            }
-        },
-        methods: {
-            getDecision: function() {
-                location.href = 'tinydecisions://decision?id=' + this.decisionId
-                setTimeout(function() {
-                   window.location = "download";
-                }, 1000);
-            },
-
-            fetchRecords: function(decisionId) {
-                var container = CloudKit.getDefaultContainer();
-                var publicDB = container.publicCloudDatabase;
-
-                console.log("fetching records from " + publicDB);
-                var query = { recordType: 'Decision', sortBy: [{ fieldName: 'downloadCount'}] };
-                
-                // Execute the query.
-                return publicDB.fetchRecords(decisionId).then(function(response) {
-                    if(response.hasErrors) {
-                        console.error(response.errors[0]);
-                        return;
-                    }
-                    var records = response.records;
-                    var numberOfRecords = records.length;
-                    if (numberOfRecords === 0) {
-                        console.error('No matching items');
-                        return;
-                    }
-                
-                    var fields = records[0]['fields'];
-                    app.name = fields['name']['value'];
-                    app.options = fields['options']['value'];
-                });
-            }
-        },
-        created: function() {
-            var lang = navigator.language;
-            if (lang.startsWith("zh-Hans") || lang.startsWith("zh-CN")) {
-                this.getButtonTitle = "获取决定";
-            } else if (lang.startsWith("zh-Hant")) {
-                this.getButtonTitle = "獲取決定";
-            }
-        }
-    })
-
-    window.addEventListener('cloudkitloaded', function() {
-        console.log("listening for cloudkitloaded");
-
-        CloudKit.configure({
-            containers: [{
-                containerIdentifier: 'iCloud.com.nixwang.decision',
-                apiToken: 'e2b818305cc80ee720cf58099e372ad1e7ceda0037e4e0d1bdec5a9978474a83',
-                environment: 'development'
-            }]
-        });
-
-        console.log("cloudkitloaded");
-        app.fetchRecords(app.decisionId);
-    });
-
-</script>
 </html>

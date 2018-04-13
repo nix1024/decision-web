@@ -6,13 +6,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
-    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/decisionstyle.css"/>
 </head>
 <body>
     <div id="app">
         <div class="install">
             <div class="install-content">
-                <img src="../images/icon.png"/>
+                <img src="/icon.png"/>
                 <h1>{{name}}</h1>
                 <p><button v-on:click="getDecision" class="btn-get">{{getButtonTitle}}</button></p>
             </div>
@@ -45,10 +45,7 @@
         },
         methods: {
             getDecision: function() {
-                location.href = 'tinydecisions://decision?id=' + this.decisionId
-                setTimeout(function() {
-                   window.location = "/";
-                }, 1000);
+                location.href = 'https://app.decision.fun/decision?id=' + this.decisionId
             },
             fetchRecords: function(decisionId) {
                 var container = CloudKit.getDefaultContainer();
